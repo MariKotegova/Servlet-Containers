@@ -22,7 +22,21 @@ public class PostService {
     }
 
     public Post save(Post post) {
-        return repository.save(post);
+        if (post.getId() == 0) {
+            long count = repository.counter += 1;
+            repository.pos.put(count, post.getContent());
+            return repository.save(post);
+        } else {
+            if (repository.pos.containsKey(post.getId())) {
+                repository.pos.put(post.getId(), post.getContent());
+                System.out.println("Значение id " + post.getId() + " изменено");
+                return repository.save(post);
+            } else {
+                System.out.println("Значение с таким id  отсутствует. Выбирите из списка id от 1 до " + repository.counter);
+                getById(post.getId());
+                return repository.save(post);
+            }
+        }
     }
 
     public void removeById(long id) {
