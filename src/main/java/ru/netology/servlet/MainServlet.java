@@ -16,6 +16,10 @@ public class MainServlet extends HttpServlet {
 //            resp.setHeader("Content-Type", "application/json");// добавить заголовок
 //        }
     private PostController controller;
+    private final String METOD_GET = "GET";
+    private final String METOD_POST = "POST";
+    private final String METOD_DELETE = "DELETE";
+    private final String PATH = "/api/posts";
 
     // метод для создания запроса
     @Override
@@ -35,25 +39,24 @@ public class MainServlet extends HttpServlet {
             final var method = req.getMethod();    // получаем метод
 
             // primitive routing , /api так пишут чтоб понимать что это бекенд.
-            if (method.equals("GET") && path.equals("/api/posts")) { // возвращаем все posts
+            if (method.equals(METOD_GET) && path.equals(PATH)) { // возвращаем все posts
                 controller.all(resp);// запрашиваем обьект респонс и выходим из обработчика
                 return;
             }
 
-            // так получаем один конкретный пост по ид
-            if (method.equals("GET") && path.matches("/api/posts/\\d+")) {
-                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+            if (method.equals(METOD_GET) && path.matches(PATH + "/\\d+")) {
+                final var id = idGet(path);
                 controller.getById(id, resp);
                 return;
             }
 
-            if (method.equals("POST") && path.equals("/api/posts")) {
+            if (method.equals(METOD_POST) && path.equals(PATH)) {
                 controller.save(req.getReader(), resp);
                 return;
             }
 
-            if (method.equals("DELETE") && path.matches("/api/posts/\\d+")) {
-                final var id = Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
+            if (method.equals(METOD_DELETE) && path.matches(PATH + "/\\d+")) {
+                final var id = idGet(path);
                 controller.removeById(id, resp);
                 return;
             }
@@ -62,9 +65,12 @@ public class MainServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
-            //resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    public static long idGet(String path) {
+        return Long.parseLong(path.substring(path.lastIndexOf("/") + 1));
     }
 }
 
