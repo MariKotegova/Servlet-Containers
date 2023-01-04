@@ -5,11 +5,12 @@ import ru.netology.model.Post;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 // Stub
 public class PostRepository {
     public static ConcurrentHashMap<Long, String> pos = new ConcurrentHashMap<>();
-    public long counter = 0;
+    public AtomicLong counter = new AtomicLong(1);
 
     public ConcurrentHashMap<Long, String> all() {
         return pos;
@@ -24,7 +25,7 @@ public class PostRepository {
 
     public Post save(Post post) {
         if (post.getId() == 0) {
-            long count = counter += 1;
+            long count = counter.getAndIncrement();
             pos.put(count, post.getContent());
         } else if (post.getId() != 0) {
             if (pos.containsKey(post.getId())) {
