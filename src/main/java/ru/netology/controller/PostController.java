@@ -18,18 +18,21 @@ public class PostController {
 
     public void all(HttpServletResponse response) throws IOException {
         final var data = service.all();
-        final var gson = gsonPrint(response);
+        response.setContentType(APPLICATION_JSON);
+        final var gson = new Gson();
         response.getWriter().print(gson.toJson(data));
     }
 
     public void getById(long id, HttpServletResponse response) throws IOException {
         final var dataId = service.getById(id);
-        final var gson = gsonPrint(response);
+        response.setContentType(APPLICATION_JSON);
+        final var gson = new Gson();
         response.getWriter().print("Позиция id- " + id + " выведена на экран: " + gson.toJson(dataId));
     }
 
     public void save(Reader body, HttpServletResponse response) throws IOException {
-        final var gson = gsonPrint(response);
+        response.setContentType(APPLICATION_JSON);
+        final var gson = new Gson();
         final var post = gson.fromJson(body, Post.class);
         final var data = service.save(post);                            // вызывает сервер
         response.getWriter().print(gson.toJson(data));
@@ -39,13 +42,8 @@ public class PostController {
     public void removeById(long id, HttpServletResponse response) throws IOException {
         final var dataId = service.getById(id);
         service.removeById(id);
-        final var gson = gsonPrint(response);
-        response.getWriter().print(gson.toJson(dataId) + " Позиция удалена ");
-    }
-
-    public Gson gsonPrint(HttpServletResponse response) {
         response.setContentType(APPLICATION_JSON);
         final var gson = new Gson();
-        return gson;
+        response.getWriter().print(gson.toJson(dataId) + " Позиция удалена ");
     }
 }

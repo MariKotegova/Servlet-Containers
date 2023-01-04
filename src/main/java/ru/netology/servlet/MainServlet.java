@@ -9,12 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class MainServlet extends HttpServlet {
-    //    @Override
-//            protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//            resp.getWriter().println("Hello!!!"); // так что то отправим в браузер
-//            resp.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);// так я могу сказать чтоб всегда выдавал имнно эту ошибку
-//            resp.setHeader("Content-Type", "application/json");// добавить заголовок
-//        }
     private PostController controller;
     private final String METOD_GET = "GET";
     private final String METOD_POST = "POST";
