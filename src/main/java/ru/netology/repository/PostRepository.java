@@ -6,6 +6,7 @@ import ru.netology.model.Post;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Supplier;
 
 // Stub
 public class PostRepository {
@@ -32,8 +33,7 @@ public class PostRepository {
                 pos.put(post.getId(), post.getContent());
                 System.out.println("Значение id " + post.getId() + " изменено");
             } else {
-                System.out.println("Значение с таким id  отсутствует. Выбирите из списка id от 1 до " + counter);
-                getById(post.getId()).orElseThrow(NotFoundException::new);
+                getById(post.getId()).orElseThrow(() -> new NotFoundException("Значение с таким id  отсутствует. "));
             }
         }
         return post;
