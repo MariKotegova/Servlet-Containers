@@ -28,13 +28,11 @@ public class PostRepository {
         if (post.getId() == 0) {
             long count = counter.getAndIncrement();
             pos.put(count, post.getContent());
-        } else if (post.getId() != 0) {
-            if (pos.containsKey(post.getId())) {
-                pos.put(post.getId(), post.getContent());
-                System.out.println("Значение id " + post.getId() + " изменено");
-            } else {
-                getById(post.getId()).orElseThrow(() -> new NotFoundException("Значение с таким id  отсутствует. "));
-            }
+        }
+        if (post.getId() != 0) {
+            getById(post.getId()).orElseThrow(() -> new NotFoundException("Значение с таким id  отсутствует. "));
+            pos.put(post.getId(), post.getContent());
+            System.out.println("Значение id " + post.getId() + " изменено");
         }
         return post;
     }
