@@ -3,18 +3,21 @@ package ru.netology.repository;
 import ru.netology.exception.NotFoundException;
 import ru.netology.model.Post;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Supplier;
 
 // Stub
 public class PostRepository {
     public static ConcurrentHashMap<Long, String> pos = new ConcurrentHashMap<>();
     public AtomicLong counter = new AtomicLong(1);
 
-    public ConcurrentHashMap<Long, String> all() {
-        return pos;
+    public List<Post> all() {
+        List<Post> p = new ArrayList<>();
+        for (long s : pos.keySet()) {
+            p.add(new Post(s, pos.get(s)));
+        }
+        return p;
     }
 
     public Optional<Post> getById(long id) {
